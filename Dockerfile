@@ -1,19 +1,15 @@
 # Step 1: Build the React app
-FROM node:16-alpine as frontend
+FROM node:20.18.0-alpine3.20
 WORKDIR /app
-COPY ./netflix-ui/package*.json ./netflix-ui/
-RUN cd netflix-ui && npm install
-COPY ./netflix-ui ./netflix-ui
-RUN cd netflix-ui && npm run build
+COPY ./netflix-ui/build ./netflix-ui/
+RUN npm install -g serve
+RUN serve -s netflix-ui &
+EXPOSE 3000
 
 # Step 2: Set up the Node.js backend
-FROM node:16-alpine
 WORKDIR /app
 COPY ./netflix-api/package*.json ./
 RUN npm install
-
-# Copy built frontend into the backend public directory
-COPY --from=frontend /app/netflix-ui/build ./public
 
 # Copy the backend code
 COPY ./netflix-api .
@@ -22,5 +18,4 @@ COPY ./netflix-api .
 EXPOSE 5000
 
 # Start the backend server
-CMD ["npm", "run", "start"]
-
+CMD ["npm","run","start"]
