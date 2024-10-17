@@ -3,8 +3,6 @@ FROM node:20.18.0-alpine3.20
 WORKDIR /app
 COPY ./netflix-ui/build ./netflix-ui/
 RUN npm install -g serve
-RUN serve -s netflix-ui &
-EXPOSE 3000
 
 # Step 2: Set up the Node.js backend
 WORKDIR /app
@@ -14,8 +12,14 @@ RUN npm install
 # Copy the backend code
 COPY ./netflix-api .
 
-# Expose the port your backend will run on
+# Expose the ports your app will run on
+# frontend
+EXPOSE 3000
+# backend
 EXPOSE 5000
 
+COPY start.sh .
+RUN chmod +x start.sh
+
 # Start the backend server
-CMD ["npm","run","start"]
+ENTRYPOINT ["sh","/app/start.sh"]
