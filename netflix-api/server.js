@@ -2,20 +2,24 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/UserRoutes");
 const mongoose = require("mongoose");
+const connectToMongoDB = require('./controllers/dbController');
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); 
 app.use(express.json());
 
-mongoose
-  .connect("mongodb://localhost:27017/netflix", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("DB Connection Successfull");
-  });
+// mongoose
+//   .connect("mongodb://localhost:27017/netflix", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     console.log("DB Connection Successfull");
+//   });
+
+const client = connectToMongoDB();
+
 
 app.use("/api/user", userRoutes);
 

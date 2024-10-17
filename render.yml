@@ -1,0 +1,17 @@
+version: 1
+services:
+  - type: web
+    name: Netflix Clone
+    env: docker
+    docker:
+      dockerfile: ./Dockerfile
+      context: .
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    autoDeploy: true
+    envVars:
+      NODE_ENV: "production"
+      PORT: "3000"
+    plan: starter
+    regions:
+      - singapore
